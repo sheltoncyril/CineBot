@@ -8,4 +8,4 @@ Additionally, it will incorporate a Large Language Model (LLM) to provide intera
 It is also possible that the user continue the conversation and in this case, the overall process will repeat until the user is satisfied.
 Finally, a User Interface (UI) will be implemented to provide the user with the most enjoyable experience.
 
-![diagram](Diagram.png)
+![diagram](Image/Diagram.png)
