@@ -1,7 +1,7 @@
 from openai import OpenAI
 from dotenv import load_dotenv, find_dotenv
 # import logging
-OPENAI_API_KEY = "..."
+OPENAI_API_KEY = "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"
 _ = load_dotenv(find_dotenv())
 client = OpenAI(api_key= OPENAI_API_KEY)
 def get_completion_from_messages(messages, model="gpt-3.5-turbo", temperature=0):
