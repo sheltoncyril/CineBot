@@ -4,7 +4,6 @@ import ActionProvider from './ChatbotDeps/ActionProvider.js';
 import './ChatbotComponent.css'
 import Chatbot from 'react-chatbot-kit'
 
-
 const ChatbotComponent = () => {
   return (
       <Chatbot

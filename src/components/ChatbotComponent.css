@@ -2,6 +2,9 @@
     width: 100vw;
     height: 100vh;
 }
+.react-chatbot-kit-chat-message-container{
+    height: auto;
+}
 .react-chatbot-kit-chat-inner-container{
     height: 100%;
     background-color: rgb(30,30,30);
@@ -31,8 +34,11 @@
     border-right: 8px solid white;
 }
 .react-chatbot-kit-chat-btn-send{
-    background-color: rgb(74,100,151);
+    color: rgb(74,100,151);
 }
-#chatbot-loader  {
-    background-color: rgb(74,100,151);
+#chatbot-loader #chatbot-loader-dot1 {
+    color: rgb(74,100,151);
+}
+.chatbot-loader-container {
+    color: rgb(74,100,151);
 }
