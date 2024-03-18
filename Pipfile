@@ -4,6 +4,14 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+flask = "*"
+openai = "*"
+transformers = "*"
+pandas = "*"
+numpy = "*"
+scikit-learn = "*"
+sentence-transformers = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
