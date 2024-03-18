@@ -2,43 +2,54 @@
     width: 100vw;
     height: 100vh;
 }
-.react-chatbot-kit-chat-message-container{
+
+.react-chatbot-kit-chat-message-container {
     height: auto;
 }
-.react-chatbot-kit-chat-inner-container{
+
+.react-chatbot-kit-chat-inner-container {
     height: 100%;
-    background-color: rgb(30,30,30);
+    background-color: rgb(30, 30, 30);
 }
-.react-chatbot-kit-chat-header{
-    background-color: rgb(46,46,46);
+
+.react-chatbot-kit-chat-header {
+    background-color: rgb(46, 46, 46);
     color: white
 }
-.react-chatbot-kit-chat-input{
-    background-color: white ;
+
+.react-chatbot-kit-chat-input {
+    background-color: white;
 }
-.react-chatbot-kit-user-chat-message{
-    background-color: rgb(192,98,61);
+
+.react-chatbot-kit-user-chat-message {
+    background-color: rgb(192, 98, 61);
     color: white;
 }
-.react-chatbot-kit-user-chat-message-arrow{
-    border-left: 8px solid rgb(192,98,61);
+
+.react-chatbot-kit-user-chat-message-arrow {
+    border-left: 8px solid rgb(192, 98, 61);
 }
+
 .react-chatbot-kit-chat-bot-message {
     background-color: white;
     margin-left: 0%;
-    color: rgb(30,30,30);
+    color: rgb(30, 30, 30);
     max-width: 50vw;
     width: auto;
 }
-.react-chatbot-kit-chat-bot-message-arrow{
+
+.react-chatbot-kit-chat-bot-message-arrow {
     border-right: 8px solid white;
 }
-.react-chatbot-kit-chat-btn-send{
-    color: rgb(74,100,151);
+
+.react-chatbot-kit-chat-btn-send {
+    color: rgb(74, 100, 151);
 }
+
 #chatbot-loader #chatbot-loader-dot1 {
-    color: rgb(74,100,151);
+    color: rgb(74, 100, 151);
 }
+
 .chatbot-loader-container {
-    color: rgb(74,100,151);
+    color: rgb(74, 100, 151);
 }

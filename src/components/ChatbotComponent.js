@@ -6,11 +6,11 @@ import Chatbot from 'react-chatbot-kit'
 
 const ChatbotComponent = () => {
   return (
-      <Chatbot
-        config={config}
-        messageParser={MessageParser}
-        actionProvider={ActionProvider}
-      />
+    <Chatbot
+      config={config}
+      messageParser={MessageParser}
+      actionProvider={ActionProvider}
+    />
   );
 };
 

@@ -10,6 +10,7 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import PorterStemmer
+import ssl
 
 
 ## load data
@@ -19,6 +20,12 @@ for i in range(len(plots)):
     plots[i] = f"{plots[i]}  {df.loc[i,'Genre']}  {df.loc[i,'Director']} {df.loc[i,'Star1']} {df.loc[i,'Star2']} {df.loc[i,'Star3']} {df.loc[i,'Star4']}"
 
 # Preprocessing 
+try:
+    _create_unverified_https_context = ssl._create_unverified_context
+except AttributeError:
+    pass
+else:
+    ssl._create_default_https_context = _create_unverified_https_context
 nltk.download('punkt')
 nltk.download('stopwords')
 
