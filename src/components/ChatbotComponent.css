@@ -2,9 +2,6 @@
     width: 100vw;
     height: 100vh;
 }
-.react-chatbot-kit-chat-message-container{
-    height: 100vh;
-}
 .react-chatbot-kit-chat-inner-container{
     height: 100%;
     background-color: rgb(30,30,30);
