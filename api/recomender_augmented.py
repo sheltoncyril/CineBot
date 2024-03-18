@@ -1,62 +1,72 @@
-## Recomender system based on Redial Dialogues 
-import pandas as pd
+## Recomender system based on Redial Dialogues
 import json
-import numpy as np
 from collections import Counter
 
-from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+
 
 # Load redial data
 def load_jsonl(file_path):
     data = []
-    with open(file_path, 'r') as file:
+    with open(file_path, "r") as file:
         for line in file:
             # Load each line as JSON
             json_data = json.loads(line.strip())
             data.append(json_data)
     return data
 
-file_path = 'train_data.jsonl'
+
+file_path = "Data/train_data.jsonl"
 train = load_jsonl(file_path)
 
 # Join all messages in conversation
-join_convs = [''] * len(train)
+join_convs = [""] * len(train)
 i = 0
-for conversation in train : 
-    messages = conversation['messages']
+for conversation in train:
+    messages = conversation["messages"]
     for message in messages:
-        join_convs[i] = join_convs[i] + message['text']
+        join_convs[i] = join_convs[i] + message["text"]
     i = i + 1
 
 print("please wait loading model")
-model = SentenceTransformer('paraphrase-MiniLM-L6-v2')
+model = SentenceTransformer(
+    "paraphrase-MiniLM-L6-v2", device="cuda", cache_folder=".models_cache"
+)
 embeded_convs = model.encode(join_convs)
 print("model loaded")
+
 
 def retrieve_similar_query(query):
     embeded_query = model.encode(query)
     MAX = -1
     idx = 0
     for i in range(len(embeded_convs)):
-        d = cosine_similarity(embeded_query.reshape(1, 384),embeded_convs[i].reshape(1, 384))
+        d = cosine_similarity(
+            embeded_query.reshape(1, 384), embeded_convs[i].reshape(1, 384)
+        )
         if d > MAX:
             MAX = d
             idx = i
-    return idx,join_convs[idx],train[idx]['movieMentions']
+    return idx, join_convs[idx], train[idx]["movieMentions"]
+
 
 def retrieve_top_k_similar_queries(query, k=5):
     embeded_query = model.encode(query)
     similarities = []
     for i in range(len(embeded_convs)):
-        sim = cosine_similarity(embeded_query.reshape(1, 384), embeded_convs[i].reshape(1, 384))
+        sim = cosine_similarity(
+            embeded_query.reshape(1, 384), embeded_convs[i].reshape(1, 384)
+        )
         similarities.append((sim, i))
     similarities.sort(reverse=True)  # Sort in descending order of similarity
-    
+
     top_k_similar_queries = []
     for sim, idx in similarities[:k]:
-        top_k_similar_queries.append((idx, join_convs[idx], train[idx]['movieMentions'], sim))
-    
+        top_k_similar_queries.append(
+            (idx, join_convs[idx], train[idx]["movieMentions"], sim)
+        )
+
     return top_k_similar_queries
 
 

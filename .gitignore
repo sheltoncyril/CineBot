@@ -23,3 +23,5 @@ chrome-user-data
 .vscode
 *.swp
 *.swo
+.secrets
+.models_cache

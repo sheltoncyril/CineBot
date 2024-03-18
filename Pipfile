@@ -12,6 +12,10 @@ numpy = "*"
 scikit-learn = "*"
 sentence-transformers = "*"
 python-dotenv = "*"
+nltk = "*"
+torch = "*"
+torchvision = "*"
+torchaudio = "*"
 
 [dev-packages]
 
