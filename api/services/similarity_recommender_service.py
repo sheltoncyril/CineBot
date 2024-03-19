@@ -3,14 +3,16 @@ import os
 import pickle
 from collections import Counter
 
-from base_service import BaseService
 from sentence_transformers import SentenceTransformer, util
 
+from .base_service import BaseService
 
-class STSvc(BaseService):
+
+class SimilarityRecommenderService(BaseService):
     def __init__(self):
         self._cuda_enabled = True if os.getenv("CUDA_ENABLED") else False
-        self._cache_dir = True if os.getenv("SENT_TRANS_CACHE_DIR") else ".cache_dir"
+        cache_dir = os.getenv("SENT_TRANS_CACHE_DIR")
+        self._cache_dir = cache_dir if cache_dir else ".cache_dir"
         self.model = SentenceTransformer(
             "paraphrase-MiniLM-L6-v2",
             device=None if not self._cuda_enabled else "cuda",
@@ -75,7 +77,10 @@ class STSvc(BaseService):
         query_embeddings = self.model.encode(query, convert_to_tensor=True)
         if self._cuda_enabled:
             query_embeddings = query_embeddings.to("cuda")
-            query_embeddings = util.normalize_embeddings(query_embeddings)
+            try:
+                query_embeddings = util.normalize_embeddings(query_embeddings)
+            except IndexError:
+                pass
         return util.semantic_search(
             query_embeddings,
             self._embedded_corpus,
@@ -119,11 +124,3 @@ class STSvc(BaseService):
         recommended_movies = [movie for movie, _ in top_k_movies]
 
         return recommended_movies
-
-
-sentence_transformer = STSvc()
-sentence_transformer.init()
-i = 0
-while i < 15:
-    print(sentence_transformer.recommend(input("Enter query: ")))
-    i += 1

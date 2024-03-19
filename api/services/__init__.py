@@ -1,3 +1,3 @@
-from service_registry import ServiceRegistry
+from .service_registry import ServiceRegistry
 
-service_registry = ServiceRegistry().init()
+service_registry = ServiceRegistry()
