@@ -65,4 +65,4 @@ def recomend_me(query,top_k = 1):
         movie_name.append(df.loc[idx]['Series_Title'])
         movie_plot.append(plots[idx])
 
-    return movie_name,movie_plot
+    return movie_name,list(reversed(cos_similarities[0,sorted_idx[-top_k:]]))

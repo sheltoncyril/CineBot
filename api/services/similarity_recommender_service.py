@@ -10,7 +10,7 @@ from .base_service import BaseService
 
 class SimilarityRecommenderService(BaseService):
     def __init__(self):
-        self._cuda_enabled = True if os.getenv("CUDA_ENABLED") else False
+        self._cuda_enabled = True if os.getenv("CUDA_ENABLED") == 1 else False
         cache_dir = os.getenv("SENT_TRANS_CACHE_DIR")
         self._cache_dir = cache_dir if cache_dir else ".cache_dir"
         self.model = SentenceTransformer(
@@ -103,9 +103,10 @@ class SimilarityRecommenderService(BaseService):
         top_k_movies = movie_mentions_counter.most_common(k)
 
         # Extract movie titles from the top k movies
-        recommended_movies = [movie for movie, _ in top_k_movies]
+        #recommended_movies = [movie for movie, nb_ in top_k_movies]
 
-        return recommended_movies
+        return top_k_movies
+
 
     def _deprecated_recommend(self, query, k=1):
         similar_queries = self._retrieve_top_k_similar_queries(query)

@@ -18,7 +18,7 @@ scikit-learn = "*"
 sentence-transformers = "*"
 python-dotenv = "*"
 nltk = "*"
-torch = {version="*", index="pytorch", markers = "platform_system == 'Windows'"}
+torch = "*"
 
 [dev-packages]
 
