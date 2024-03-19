@@ -25,3 +25,4 @@ chrome-user-data
 *.swo
 .secrets
 .models_cache
+.cache_dir

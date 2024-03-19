@@ -1,6 +1,6 @@
 from flask import Flask, request
 from Recomender import recomend_me
-from recomender_augmented import recommend_me_augmented
+from services import service_registry
 
 app = Flask(__name__)
 
@@ -15,5 +15,5 @@ def send_query():
     query = request.get_json()["data"]["message"]
 
     movie1, _ = recomend_me(query)
-    movie2 = recommend_me_augmented(query)
+    movie2 = service_registry.get_service.recommend(query)
     return {"response": " ".join([movie1, movie2])}

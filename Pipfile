@@ -3,6 +3,11 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 name = "pypi"
 
+[[source]]
+url = "https://download.pytorch.org/whl/cu118"
+verify_ssl = true
+name = "pytorch"
+
 [packages]
 flask = "*"
 openai = "*"
@@ -13,9 +18,7 @@ scikit-learn = "*"
 sentence-transformers = "*"
 python-dotenv = "*"
 nltk = "*"
-torch = "*"
-torchvision = "*"
-torchaudio = "*"
+torch = {version="*", index="pytorch", markers = "platform_system == 'Windows'"}
 
 [dev-packages]
 
