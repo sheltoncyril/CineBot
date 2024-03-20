@@ -9,7 +9,6 @@ verify_ssl = true
 name = "pytorch"
 
 [packages]
-flask = "*"
 openai = "*"
 transformers = "*"
 pandas = "*"
@@ -19,6 +18,9 @@ sentence-transformers = "*"
 python-dotenv = "*"
 nltk = "*"
 torch = "*"
+sqlmodel = "*"
+fastapi = "*"
+uvicorn = {extras = ["standard"], version = "*"}
 
 [dev-packages]
 

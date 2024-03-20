@@ -1,6 +1,7 @@
 from .similarity_recommender_service import SimilarityRecommenderService
+from .tfidf_recomender_service import TFIDFRecommenderService
 
-service_map = dict(similarity_recommender_service=SimilarityRecommenderService)
+service_map = dict(similarity_recommender_service=SimilarityRecommenderService, tfidf_recommender_service=TFIDFRecommenderService)
 
 
 class ServiceRegistry:
@@ -22,4 +23,7 @@ class ServiceRegistry:
         svc = self.initialized_service_map.get(svc_name)
         if svc:
             return svc
-        raise NotImplementedError
+        raise NotImplementedError(f"service {svc_name} is not implemented.")
+
+    def cleanup(self):
+        pass

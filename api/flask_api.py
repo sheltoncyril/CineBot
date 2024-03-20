@@ -19,8 +19,6 @@ def send_query():
     suggestions = list()
     # movie1, _ = recomend_me(query)
     # suggestions.extend(movie1)
-    movie2 = service_registry.get_service("similarity_recommender_service").recommend(
-        query
-    )
+    movie2 = service_registry.get_service("similarity_recommender_service").recommend(query)
     suggestions.extend(movie2)
     return {"response": ", ".join(suggestions)}

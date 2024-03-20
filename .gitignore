@@ -26,3 +26,4 @@ chrome-user-data
 .secrets
 .models_cache
 .cache_dir
+sqlite.db
