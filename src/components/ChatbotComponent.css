@@ -31,15 +31,18 @@
 }
 
 .react-chatbot-kit-chat-bot-message {
-    background-color: rgb(242, 242, 242);
+    background-color: rgba(112, 110, 110, 0.1);
     margin-left: 0%;
-    color: black;
     max-width: 50vw;
     width: auto;
+    color: white !important;
+    box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.2);
+    margin: 0 8px 8px 8px;
+    border-radius: 8px;
 }
 
 .react-chatbot-kit-chat-bot-message-arrow {
-    border-right: 8px solid lightgrey;
+    border-right: 8px solid #312b2b;
 }
 
 .react-chatbot-kit-chat-btn-send {
