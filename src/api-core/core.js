@@ -14,7 +14,7 @@ const createChat = () => {
             'accept': 'application/json',
         }
     })
-        .then((res) => console.log('res',res))
+        .then((res) => console.log(res))
         .then((data) => { return data })
         .catch((err) => console.log(err))
 }

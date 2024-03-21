@@ -3,6 +3,7 @@ import re
 from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from models.api_models import Chat, ChatResponse, Message, MessageRequest
 from services import service_registry
 from services.db_service import DB
@@ -20,6 +21,15 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 db = DB()
 db.init()
 
