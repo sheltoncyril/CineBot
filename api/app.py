@@ -46,16 +46,20 @@ def send_query(chat_id: str, prompt: MessageRequest, session: Session = Depends(
     chat = session.get(Chat, chat_id)
     if not chat:
         raise HTTPException(status_code=404, detail="Chat not found")
+    if chat.messages:
+        msg_seq_no = chat.messages[-1].seq_no + 1
+    else:
+        msg_seq_no = 1
     suggestions = list()
-    # movie1, _ = recomend_me(query)
-    # suggestions.extend(movie1)
     movie1, _ = service_registry.get_service("tfidf_recommender_service").recommend(prompt.message)
     suggestions.extend(movie1)
     movie2, _ = service_registry.get_service("similarity_recommender_service").recommend(prompt.message)
     for movie in movie2:
         suggestions.append(expr.sub("", movie).strip())
     prompt = Message.model_validate(prompt)
-    response = Message(message="We suggest that you watch " + " ".join(suggestions), sender="server", chat_id=chat.id)
+    prompt.seq_no = msg_seq_no
+    msg_seq_no += 1
+    response = Message(message="We suggest that you watch " + " ".join(suggestions), role="system", chat_id=chat.id, seq_no=msg_seq_no)
     chat.updated_time = response.creation_time
     chat.messages.append(prompt)
     chat.messages.append(response)

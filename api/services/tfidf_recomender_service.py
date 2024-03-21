@@ -31,14 +31,12 @@ class TFIDFRecommenderService(BaseService):
         nltk.download("stopwords")
         self.stop_words = set(stopwords.words("english"))
         self._train_from_csv()
-        self.tfidf = self.tfidf_vectorizer.fit_transform(self.preprocessed_plots)
         with open(f"{self._cache_dir}/tfidf.pkl", "wb") as f:
             pickle.dump(
                 (
                     self.df,
                     self.plots,
                     self.preprocessed_plots,
-                    self.tfidf,
                     self.stop_words,
                 ),
                 f,
@@ -59,18 +57,18 @@ class TFIDFRecommenderService(BaseService):
         self.stemmer = PorterStemmer()
         self.tfidf_vectorizer = TfidfVectorizer()
         # Fit the vectorizer to the documents and transform them into TF-IDF vectors
-        if not os.path.exists(f"{self._cache_dir}/.tfidf_init"):
+        if not os.path.exists(f"{self._cache_dir}/.tfidf_svc_init"):
             self._first_run_setup()
-            with open(f"{self._cache_dir}/.tfidf_init", mode="a"):
+            with open(f"{self._cache_dir}/.tfidf_svc_init", mode="a"):
                 pass
         with open(f"{self._cache_dir}/tfidf.pkl", "rb") as f:
             (
                 self.df,
                 self.plots,
                 self.preprocessed_plots,
-                self.tfidf,
                 self.stop_words,
             ) = pickle.load(f)
+        self.tfidf = self.tfidf_vectorizer.fit_transform(self.preprocessed_plots)
 
     def preprocess_text(self, text):
         tokens = word_tokenize(text)
