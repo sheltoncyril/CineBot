@@ -1,23 +1,29 @@
 import React from "react";
+import { createChat, getChat, sendQuery } from "../../api-core/core";
 
 const ActionProvider = ({ createChatBotMessage, setState, children }) => {
+
   const handleQuery = (message) => {
-    fetch("/query", {
-      method: "POST",
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ data: { message: message } }),
-    }).then((res) =>
-      res.json().then((data) => {
-        const botMessage = createChatBotMessage(data.response);
-        setState((prev) => ({
-          ...prev,
-          messages: [...prev.messages, botMessage],
-        }));
+    let chatID = localStorage.getItem('chatID')
+    if (!chatID) {
+      createChat().then((res) => {
+        console.log('Res',res)
       })
-    );
+      .catch((err) => console.log(err))
+    }
+    else{
+      sendQuery(message, chatID)
+      .then((res) =>
+        res.json().then((data) => {
+          const botMessage = createChatBotMessage(data.response);
+          setState((prev) => ({
+            ...prev,
+            messages: [...prev.messages, botMessage],
+          }));
+        })
+      );
+    }
+   
   };
   return (
     <div>
