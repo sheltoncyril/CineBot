@@ -14,7 +14,6 @@ class DB():
     def get_session(self):
         with Session(self.engine) as session:
             yield session
-            session.commit()
             
     @property
     def session(self):

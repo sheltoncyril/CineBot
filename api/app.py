@@ -7,8 +7,7 @@ from models.api_models import Chat, Message, MessageRequest
 from services import service_registry
 from services.db_service import DB
 from sqlmodel import Session
-
-from api.utils.id_generators import generate_id_with_prefix
+from utils.id_generators import generate_id_with_prefix
 
 expr = re.compile(r"(\([0-9]{4}\))$")
 
