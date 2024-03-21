@@ -12,7 +12,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 from .base_service import BaseService
-from .base_service import BaseService
 
 
 class TFIDFRecommenderService(BaseService):
@@ -32,6 +31,7 @@ class TFIDFRecommenderService(BaseService):
         nltk.download("stopwords")
         self.stop_words = set(stopwords.words("english"))
         self._train_from_csv()
+        self.tfidf = self.tfidf_vectorizer.fit_transform(self.preprocessed_plots)
         with open(f"{self._cache_dir}/tfidf.pkl", "wb") as f:
             pickle.dump(
                 (
@@ -50,7 +50,9 @@ class TFIDFRecommenderService(BaseService):
         self.df = pd.read_csv(file_path)
         self.plots = self.df["Overview"].values.tolist()
         for i in range(len(self.plots)):
-            self.plots[i] = f"{self.plots[i]}  {self.df.loc[i,'Genre']}  {self.df.loc[i,'Director']} {self.df.loc[i,'Star1']} {self.df.loc[i,'Star2']} {self.df.loc[i,'Star3']} {self.df.loc[i,'Star4']}"  # fmt: off
+            self.plots[i] = (
+                f"{self.plots[i]}  {self.df.loc[i,'Genre']}  {self.df.loc[i,'Director']} {self.df.loc[i,'Star1']} {self.df.loc[i,'Star2']} {self.df.loc[i,'Star3']} {self.df.loc[i,'Star4']}"  # fmt: off
+            )
         self.preprocess_plots()
 
     def init(self):
@@ -69,15 +71,10 @@ class TFIDFRecommenderService(BaseService):
                 self.tfidf,
                 self.stop_words,
             ) = pickle.load(f)
-        self.tfidf = self.tfidf_vectorizer.fit_transform(self.preprocessed_plots)
 
     def preprocess_text(self, text):
         tokens = word_tokenize(text)
-        processed_tokens = [
-            self.stemmer.stem(word.lower())
-            for word in tokens
-            if word.isalnum() and word.lower() not in self.stop_words
-        ]
+        processed_tokens = [self.stemmer.stem(word.lower()) for word in tokens if word.isalnum() and word.lower() not in self.stop_words]
         return " ".join(processed_tokens)
 
     def preprocess_plots(self):

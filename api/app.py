@@ -3,7 +3,7 @@ import re
 from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, HTTPException
-from models.api_models import Chat, Message, MessageRequest
+from models.api_models import Chat, ChatResponse, Message, MessageRequest
 from services import service_registry
 from services.db_service import DB
 from sqlmodel import Session
@@ -33,7 +33,7 @@ def create_chat(session: Session = Depends(db.get_session)):
     return chat
 
 
-@app.get("/chat/{chat_id}", response_model=Chat)
+@app.get("/chat/{chat_id}", response_model=ChatResponse)
 def get_chat(chat_id: str, session: Session = Depends(db.get_session)):
     chat = session.get(Chat, chat_id)
     if not chat:

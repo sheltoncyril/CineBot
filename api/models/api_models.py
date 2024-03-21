@@ -19,6 +19,13 @@ class Chat(SQLModel, table=True):
     messages: List["Message"] = Relationship(back_populates="chat")
 
 
+class ChatResponse(SQLModel):
+    id: str
+    creation_time: datetime
+    updated_time: datetime
+    messages: List["Message"]
+
+
 class MessageRequest(SQLModel):
     message: str
     sender: Sender = "user"
