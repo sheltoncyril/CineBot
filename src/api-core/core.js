@@ -12,7 +12,7 @@ const createChat = () => {
             'accept': 'application/json',
         }
     })
-        .then((res) => console.log(res))
+        .then((res) => res.json())
         .then((data) => { return data })
         .catch((err) => console.log(err))
 }
@@ -32,14 +32,16 @@ const getChat = (chatID) => {
 const sendQuery = (payload, chatID) => {
     return fetch(baseURL + `/chat/${chatID}/message`, {
         method: "POST",
-        mode: "no-cors",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+            message: payload,
+        })
     })
-        .then((res) => { return res })
+        .then((res) => res.json())
+        .then((data) => { return data })
         .catch((err) => console.log(err))
 
 }

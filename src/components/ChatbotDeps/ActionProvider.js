@@ -3,27 +3,43 @@ import { createChat, getChat, sendQuery } from "../../api-core/core";
 
 const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 
-  const handleQuery = (message) => {
-    let chatID = localStorage.getItem('chatID')
-    if (!chatID) {
-      createChat().then((res) => {
-        console.log('Res',res)
-      })
-      .catch((err) => console.log(err))
-    }
-    else{
-      sendQuery(message, chatID)
-      .then((res) =>
-        res.json().then((data) => {
-          const botMessage = createChatBotMessage(data.response);
+  const sendTheQuery = (message, chatID) => {
+    sendQuery(message, chatID)
+      .then((res) => {
+        console.log(res)
+        let botMessage = createChatBotMessage();
+        if (res.detail && res.detail == 'Chat not found') {
+          localStorage.clear()
+          botMessage = createChatBotMessage(res.detail)
+        }
+        if (res.message) {
+          botMessage = createChatBotMessage(res.message);
           setState((prev) => ({
             ...prev,
             messages: [...prev.messages, botMessage],
           }));
-        })
-      );
+        }
+      });
+  }
+  const handleQuery = (message) => {
+    let chatID = localStorage.getItem('chatID')
+    console.log('cha', chatID)
+    if (!chatID) {
+      createChat().then((res) => {
+        console.log('Res', res)
+        if (res && res.id) {
+          localStorage.setItem('chatID', res.id)
+          sendTheQuery(message, res.id
+          )
+        }
+
+      })
+        .catch((err) => console.log(err))
     }
-   
+    else {
+      sendTheQuery(message, chatID)
+    }
+
   };
   return (
     <div>
