@@ -4,7 +4,7 @@ from base_service import BaseService
 
 class CineBot(BaseService):
     def init(self):
-        self.api_key = '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'
+        self.api_key = ''
         self.client = OpenAI(api_key=self.api_key)
     
 
