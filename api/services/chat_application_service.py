@@ -97,7 +97,6 @@ class ChatApplicationService(BaseService):
             return prompts[3]
 
     def process_message(self, session, chat_id: str, message_request: MessageRequest):
-        suggestions = list()
         threshold = 0.7
         chat = self.get_chat(session, chat_id)
         chatgpt_service = self.service_registry.get_service("chatgpt_service")
