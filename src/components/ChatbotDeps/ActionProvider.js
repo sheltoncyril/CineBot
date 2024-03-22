@@ -8,11 +8,11 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
       .then((res) => {
         console.log(res)
         let botMessage = createChatBotMessage();
-        if (res.detail && res.detail == 'Chat not found') {
+        if (res && res.detail && res.detail == 'Chat not found') {
           localStorage.clear()
           botMessage = createChatBotMessage(res.detail)
         }
-        if (res.message) {
+        if (res && res.message) {
           botMessage = createChatBotMessage(res.message);
           setState((prev) => ({
             ...prev,
