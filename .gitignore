@@ -27,3 +27,4 @@ chrome-user-data
 .models_cache
 .cache_dir
 sqlite.db
+.env

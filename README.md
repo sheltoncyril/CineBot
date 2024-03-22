@@ -9,3 +9,10 @@ It is also possible that the user continue the conversation and in this case, th
 Finally, a User Interface (UI) will be implemented to provide the user with the most enjoyable experience.
 
 ![diagram](Image/Diagram.png)
+
+
+# Steps to run
+```
+npm run start
+npm run start-api
+```
