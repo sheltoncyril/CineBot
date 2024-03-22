@@ -1,7 +1,16 @@
+from .chat_application_service import ChatApplicationService
+from .chatgpt_service import ChatGPTService
+from .db_service import DBService
 from .similarity_recommender_service import SimilarityRecommenderService
-from .tfidf_recomender_service import TFIDFRecommenderService
+from .tfidf_recommender_service import TFIDFRecommenderService
 
-service_map = dict(similarity_recommender_service=SimilarityRecommenderService, tfidf_recommender_service=TFIDFRecommenderService)
+service_map = dict(
+    chat_application_service=ChatApplicationService,
+    similarity_recommender_service=SimilarityRecommenderService,
+    tfidf_recommender_service=TFIDFRecommenderService,
+    db_service=DBService,
+    chatgpt_service=ChatGPTService,
+)
 
 
 class ServiceRegistry:
@@ -16,7 +25,7 @@ class ServiceRegistry:
     def _init_service(self, svc_name, args=None, kwargs=None):
         svc = self.service_map.get(svc_name)
         svc = svc()
-        svc.init()
+        svc.init(self)
         self.initialized_service_map[svc_name] = svc
 
     def get_service(self, svc_name):

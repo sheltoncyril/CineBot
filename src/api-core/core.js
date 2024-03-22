@@ -8,8 +8,6 @@ const baseURL = "http://localhost:5000"
 const createChat = () => {
     return fetch(baseURL + `/chat`, {
         method: "POST",
-        mode: 'no-cors',
-        credentials: 'include',
         headers: {
             'accept': 'application/json',
         }
@@ -22,7 +20,6 @@ const createChat = () => {
 const getChat = (chatID) => {
     return fetch(baseURL + `/chat/${chatID}`, {
         method: "GET",
-        mode: "no-cors",
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'

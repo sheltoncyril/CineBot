@@ -53,7 +53,7 @@ class TFIDFRecommenderService(BaseService):
             )
         self.preprocess_plots()
 
-    def init(self):
+    def init(self, *args, **kwargs):
         self.stemmer = PorterStemmer()
         self.tfidf_vectorizer = TfidfVectorizer()
         # Fit the vectorizer to the documents and transform them into TF-IDF vectors

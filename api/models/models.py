@@ -18,6 +18,9 @@ class Chat(SQLModel, table=True):
 
     messages: List["Message"] = Relationship(back_populates="chat")
 
+    def get_messages(self):
+        return [{"role": message.role, "content": message.message} for message in self.messages]
+
 
 class ChatResponse(SQLModel):
     id: str

@@ -1,31 +1,29 @@
-from dotenv import find_dotenv, load_dotenv
+import os
+
 from openai import OpenAI
-from base_service import BaseService
 
-class CineBot(BaseService):
-    def init(self):
-        self.api_key = ''
-        self.client = OpenAI(api_key=self.api_key)
-    
+from .base_service import BaseService
 
-    def get_completion_from_messages(self, messages, model="gpt-3.5-turbo", temperature=0):
-        chat_completion = self.client.chat.completions.create(
-            messages=messages,
-            model=model
-        )
+
+class ChatGPTService(BaseService):
+    def init(self, *args, **kwargs):
+        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+    def get_completion_from_messages(self, messages, model="gpt-3.5-turbo"):
+        chat_completion = self.client.chat.completions.create(messages=messages, model=model)
         return chat_completion.choices[0].message.content
 
     def format_ai_response(self, raw_response):
         lines = raw_response.split("\n")
         ai_responses = [line for line in lines if line.startswith("CineBot:")]
-        formatted_responses = [
-            line.replace("CineBot:", "").strip() for line in ai_responses
-        ]
+        formatted_responses = [line.replace("CineBot:", "").strip() for line in ai_responses]
         final_response = " ".join(formatted_responses)
         return final_response
 
     def collect_user_queries(self, query, movie, context):
-        prompt = fprompt = f"""
+        prompt = (
+            fprompt
+        ) = f"""
         If user does not ask for recommendation and make a normal conversation
         otherwise  greet the user without any suggestion and let user lead to their {query}.
         else if the user is asking for a recommendation them recommend this {movie}.

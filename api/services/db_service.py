@@ -3,12 +3,12 @@ import os
 from sqlmodel import Session, SQLModel, create_engine
 
 
-class DB():
+class DBService():
     def __init__(self):
         self.db_url = f"sqlite:///{os.environ.get("DB_FILENAME", 'sqlite.db')}"
         self.engine = create_engine(self.db_url)
 
-    def init(self):
+    def init(self, *args, **kwargs):
         SQLModel.metadata.create_all(self.engine)
 
     def get_session(self):
@@ -17,7 +17,7 @@ class DB():
             
     @property
     def session(self):
-        yield self.get_session()
+        return Session(self.engine)
 
     def cleanup(self):
         self.engine.close()

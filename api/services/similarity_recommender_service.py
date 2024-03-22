@@ -36,34 +36,26 @@ class SimilarityRecommenderService(BaseService):
 
     def _first_run_setup(self):
         self._train_from_jsonl()
-        with open(f"{self._cache_dir}/corpus_embedded.pkl", "wb") as f0, open(
-            f"{self._cache_dir}/corpus_mapped_data.pkl", "wb"
-        ) as f1:
+        with open(f"{self._cache_dir}/corpus_embedded.pkl", "wb") as f0, open(f"{self._cache_dir}/corpus_mapped_data.pkl", "wb") as f1:
             pickle.dump(self._embedded_corpus, f0)
             pickle.dump((self._corpus, self._corpus_mapped_data), f1)
 
-    def init(self):
+    def init(self, *args, **kwargs):
         if not os.path.exists(f"{self._cache_dir}/.initialized"):
             self._first_run_setup()
             with open(f"{self._cache_dir}/.initialized", mode="a"):
                 pass
-        with open(f"{self._cache_dir}/corpus_embedded.pkl", "rb") as f0, open(
-            f"{self._cache_dir}/corpus_mapped_data.pkl", "rb"
-        ) as f1:
+        with open(f"{self._cache_dir}/corpus_embedded.pkl", "rb") as f0, open(f"{self._cache_dir}/corpus_mapped_data.pkl", "rb") as f1:
             self._embedded_corpus = pickle.load(f0)
             self._corpus, self._corpus_mapped_data = pickle.load(f1)
         if self._cuda_enabled:
-            self._embedded_corpus = util.normalize_embeddings(
-                self._embedded_corpus.to("cuda")
-            )
+            self._embedded_corpus = util.normalize_embeddings(self._embedded_corpus.to("cuda"))
 
     def _retrieve_top_k_similar_queries(self, query, k=5):
         embeded_query = self.model.encode(query, convert_to_tensor=True)
         similarities = []
         for i in range(len(self._corpus)):
-            sim = util.cos_sim(
-                embeded_query.reshape(1, 384), self._corpus[i].reshape(1, 384)
-            )
+            sim = util.cos_sim(embeded_query.reshape(1, 384), self._corpus[i].reshape(1, 384))
             similarities.append((sim, i))
         similarities.sort(reverse=True)  # Sort in descending order of similarity
 
