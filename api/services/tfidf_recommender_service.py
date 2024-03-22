@@ -78,22 +78,17 @@ class TFIDFRecommenderService(BaseService):
     def preprocess_plots(self):
         self.preprocessed_plots = [self.preprocess_text(plot) for plot in self.plots]
 
-    def recommend(self, query, top_k=1):
+    def recommend(self, query, k=1):
         movie_name = []
         movie_plot = []
         preprocessed_query = self.preprocess_text(query)
-
         tfidf_query = self.tfidf_vectorizer.transform([preprocessed_query])
-
         cos_similarities = cosine_similarity(tfidf_query, self.tfidf)
-
         sorted_idx = np.argsort(cos_similarities.squeeze())
-
-        for idx in reversed(sorted_idx[-top_k:]):
+        for idx in reversed(sorted_idx[-k:]):
             movie_name.append(self.df.loc[idx]["Series_Title"])
             movie_plot.append(self.plots[idx])
-
-        return movie_name, list(reversed(cos_similarities[0, sorted_idx[-top_k:]]))
+        return movie_name, list(reversed(cos_similarities[0, sorted_idx[-k:]]))
 
 
 if __name__ == "__main__":

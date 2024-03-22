@@ -26,22 +26,21 @@ class ChatApplicationService(BaseService):
         return chat
 
     def _get_recommendations_for_chat(self, chat):
-        m1 = self.service_registry.get_service("tfidf_recommender_service").recommend(self._get_context_query(chat.messages, user_only=True), k=10)
-        m2 = self.service_registry.get_service("similarity_recommender_service").recommend(self._get_context_query(chat.messages), k=10)
+        r1, c1 = self.service_registry.get_service("similarity_recommender_service").recommend(self._get_context_query(chat.messages), k=7)
+        r2, c2 = self.service_registry.get_service("tfidf_recommender_service").recommend(self._get_context_query(chat.messages, user_only=True), k=7)
         L = []
-        for m in m1:
-            a = remove_date_from_movie(m[0])
-            L.append((a, m[1]))
+        for m, c in zip(r1, c1):
+            a = remove_date_from_movie(m)
+            L.append((a, c))
         score = defaultdict(lambda: 0)
         total = 0
+        max_c1 = max(c1)
         for movie in L:
-            total += movie[1]
-        for movie in L:
-            score[movie[0]] = movie[1] / total
-        for movie, score2 in zip(m2[0], m2[1]):
-            score[movie] += score2 * 1.5
+            score[movie[0]] = movie[1] / max_c1
+        for movie, score2 in zip(r2, c2):
+            score[movie] += score2 * 3
         sorted_score = sorted(score.items(), key=lambda x: x[1], reverse=True)
-        k = 5
+        k = 3
         movies = []
         confidence = 0
         for m in sorted_score[:k]:
@@ -53,7 +52,7 @@ class ChatApplicationService(BaseService):
         query = ""
         for message in messages:
             if message.role == Role.user or (message.role == Role.assistant and not user_only):
-                query += message.message
+                query += message.message + " "
         return query
 
     def _get_system_prompt(self, seq_no, recommendations, confidence, threshold, current_query):
@@ -61,10 +60,17 @@ class ChatApplicationService(BaseService):
             f"""
         Imagine you are a movie recommendation chatbot called Cinebot. 
         Greet the user if if the user has greeted you.
-        Ask the user about their past preference of movie genre and names of movies they liked
+        Ask the user about their past preference of movie genre and names of movies they liked.
+        Do not recommend any movies to the user.
         """,
             f"""
         Ask the user on what they like and dislike in past movies they watched.
+        Do not recommend any movies to the user.
+        
+        """,
+            f"""
+        Ask the more about genre, directors, actors in past movies they watched.
+        Do not recommend any movies to the user.
         
         """,
             f"""
@@ -83,10 +89,12 @@ class ChatApplicationService(BaseService):
 
         if seq_no == 2:
             return prompts[0]
-        elif seq_no < 4 and confidence < threshold:
+        if seq_no == 5:
             return prompts[1]
-        elif confidence > threshold:
+        elif seq_no < 8 and confidence < threshold:
             return prompts[2]
+        elif confidence > threshold:
+            return prompts[3]
 
     def process_message(self, session, chat_id: str, message_request: MessageRequest):
         suggestions = list()
@@ -110,6 +118,7 @@ class ChatApplicationService(BaseService):
             msg_seq_no += 1
         assistant_response = chatgpt_service.get_completion_from_messages(chat.get_messages())
         message_response = Message(message=assistant_response, role="assistant", chat_id=chat_id, seq_no=msg_seq_no)
+        chat.messages.append(message_response)
         chat.updated_time = message_response.creation_time
         session.add(chat)
         session.commit()

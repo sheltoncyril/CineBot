@@ -87,17 +87,14 @@ class SimilarityRecommenderService(BaseService):
             movie_mentions = self._corpus_mapped_data[similar_query["corpus_id"]]
             if movie_mentions:
                 movie_mentions_list.extend(movie_mentions.values())
-
         # Count occurrences of each movie
         movie_mentions_counter = Counter(movie_mentions_list)
-
         # Find the top k most mentioned movies
         movie_to_count_map = movie_mentions_counter.most_common(k)
-
         # Extract movie titles from the top k movies
         # recommended_movies = [movie for movie, nb_ in movie_to_count_map]
-
-        return zip(*movie_to_count_map)
+        retval = list(zip(*movie_to_count_map))
+        return retval[0], retval[1]
 
     def _deprecated_recommend(self, query, k=1):
         similar_queries = self._retrieve_top_k_similar_queries(query)
